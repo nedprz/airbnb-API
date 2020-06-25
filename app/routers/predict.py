@@ -50,25 +50,25 @@ async def predict(item: Item):
 
 
 
-@router.get('/model')
-async def model1():
-    # get data
-    data = request.get_json(force=True)
-    print(data)
-
+#@router.get('/model')
+#async def model1():
+ #   # get data
+  #  data = request.get_json(force=True)
+   # print(data)
+#
     # convert data into dataframe
-    data.update((x, [y]) for x, y in data.items())
-    data_df = pd.DataFrame.from_dict(data)
+ #   data.update((x, [y]) for x, y in data.items())
+  #  data_df = pd.DataFrame.from_dict(data)
 
-    print(data_df.shape)
+   # print(data_df.shape)
     # predictions
-    result = model.predict(data_df)
+   # result = model.predict(data_df)
 
     # send back to browser
-    output = {'results': int(result[0])}
+   # output = {'results': int(result[0])}
 
     # return data
-    return jsonify(results=output)
+   # return jsonify(results=output)
 
 
 
