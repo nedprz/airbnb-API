@@ -1,13 +1,22 @@
 import logging
 import random
-
+from keras.models import Model
+from tensorflow import keras
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
+from tensorflow.keras.optimizers import Adam
+import pickle
 from fastapi import APIRouter
 import pandas as pd
 from pydantic import BaseModel, Field, validator
+from joblib import load 
+from flask import Flask, jsonify, request
+
 
 log = logging.getLogger(__name__)
 router = APIRouter()
-
+model = load('model.pkl')
 
 class Item(BaseModel):
     """Use this data model to parse the request body JSON."""
@@ -34,6 +43,33 @@ async def predict(item: Item):
     X_new = item.to_df()
     log.info(X_new)
     y_pred = random.randint(20,1000) 
+    
     return {
         y_pred
     }
+
+
+
+@router.get('/model')
+async def model1():
+    # get data
+    data = request.get_json(force=True)
+    print(data)
+
+    # convert data into dataframe
+    data.update((x, [y]) for x, y in data.items())
+    data_df = pd.DataFrame.from_dict(data)
+
+    print(data_df.shape)
+    # predictions
+    result = model.predict(data_df)
+
+    # send back to browser
+    output = {'results': int(result[0])}
+
+    # return data
+    return jsonify(results=output)
+
+
+
+
