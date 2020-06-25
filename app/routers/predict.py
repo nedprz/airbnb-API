@@ -2,10 +2,7 @@ import logging
 import random
 from keras.models import Model
 from tensorflow import keras
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
-from tensorflow.keras.optimizers import Adam
+
 import pickle
 from fastapi import APIRouter
 import pandas as pd
@@ -16,7 +13,7 @@ from flask import Flask, jsonify, request
 
 log = logging.getLogger(__name__)
 router = APIRouter()
-model = load('model.pkl')
+# model = load('model.pkl')
 
 class Item(BaseModel):
     """Use this data model to parse the request body JSON."""
