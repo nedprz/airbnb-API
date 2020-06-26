@@ -1,9 +1,9 @@
 import logging
 import random
-from keras.models import Model
-from tensorflow import keras
+#from keras.models import Model
+#from tensorflow import keras
 
-import pickle
+#import pickle
 from fastapi import APIRouter
 import pandas as pd
 from pydantic import BaseModel, Field, validator
@@ -13,7 +13,7 @@ from flask import Flask, jsonify, request
 
 log = logging.getLogger(__name__)
 router = APIRouter()
-model = load('model.pkl')
+
 
 class Item(BaseModel):
     """Use this data model to parse the request body JSON."""
@@ -33,6 +33,9 @@ class Item(BaseModel):
         assert value > 0, f'MinimumNights == {value}, must be > 0'
         return value
 
+model = load('model.pkl')
+result = model.predict(data_df)
+
 
 @router.post('/predict')
 async def predict(item: Item):
@@ -46,26 +49,9 @@ async def predict(item: Item):
     }
 
 
-
-@router.post('/predict2')
-def predict2():
-    # get data
-    data = request.get_json(force=True)
-    print(data)
-
-    # convert data into dataframe
-    data.update((x, [y]) for x, y in data.items())
-    data_df = pd.DataFrame.from_dict(data)
-
-    print(data_df.shape)
-    # predictions
-    result = model.predict(data_df)
-
-    # send back to browser
-    output = {'results': int(result[0])}
-
-    # return data
-    return jsonify(results=output)
-
+@app.post("/items/")
+async def create_item(item: Item):
+    y_pred = random.randint(100,500) 
+    return y_pred
 
 
